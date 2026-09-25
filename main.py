@@ -3,56 +3,67 @@ import math
 
 def general_calculator():
 
-    while True:
-        operation = input("Choose operation (+, -, *, /, **, sqrt): ")
-
-        if operation in ["+", "-", "*", "/", "**", "sqrt"]:
-            break
-        else:
-            print("Error: Invalid operation. Please try again.")
-
     # First number
     while True:
         try:
             num1 = float(input("Enter first number: "))
+            break
 
-            if operation == "sqrt" and num1 < 0:
-                print("Error: Cannot calculate square root of a negative number.")
+        except ValueError:
+            print("Error: Please enter a valid number.")
+
+    # Operation
+    while True:
+        operation = input(
+            "Choose operation (+, -, *, /, **, root, log): "
+        )
+
+        if operation in ["+", "-", "*", "/", "**", "root", "log"]:
+            break
+        else:
+            print("Error: Invalid operation. Please try again.")
+
+    # Second number
+    while True:
+        try:
+            num2 = float(input("Enter second number: "))
+
+            if operation == "/" and num2 == 0:
+                print("Error: Cannot divide by zero.")
                 continue
+
+            if operation == "root" and num2 == 0:
+                print("Error: Root degree cannot be zero.")
+                continue
+
+            if operation == "log":
+
+                if num1 <= 0:
+                    print("Error: Logarithm value must be greater than zero.")
+                    continue
+
+                if num2 <= 0 or num2 == 1:
+                    print(
+                        "Error: Logarithm base must be greater than zero "
+                        "and cannot be 1."
+                    )
+                    continue
 
             break
 
         except ValueError:
             print("Error: Please enter a valid number.")
 
-    # Square root only needs one number
-    if operation == "sqrt":
-        result = math.sqrt(num1)
-
-    else:
-
-        # Second number
-        while True:
-            try:
-                num2 = float(input("Enter second number: "))
-
-                if operation == "/" and num2 == 0:
-                    print("Error: Cannot divide by zero.")
-                    continue
-
-                break
-
-            except ValueError:
-                print("Error: Please enter a valid number.")
-
-        # Calculation
-        result = {
-                 (operation == "+"): num1 + num2,
-                 (operation == "-"): num1 - num2,
-                 (operation == "*"): num1 * num2,
-                 (operation == "/"): num1 / num2,
-                 (operation == "**"): num1 ** num2
-                }[True]
+    # Calculation
+    result = {
+        (operation == "+"): num1 + num2,
+        (operation == "-"): num1 - num2,
+        (operation == "*"): num1 * num2,
+        (operation == "/"): num1 / num2,
+        (operation == "**"): num1 ** num2,
+        (operation == "root"): num1 ** (1 / num2),
+        (operation == "log"): math.log(num1, num2)
+    }[True]
 
     print(f"\nResult: {result}")
 
@@ -114,7 +125,6 @@ def financial_calculator():
                     print("Error: Please enter a valid whole number.")
 
             monthly_interest_rate = annual_interest_rate / 12
-
             number_of_payments = years * 12
 
             monthly_payment = (
@@ -136,9 +146,11 @@ def financial_calculator():
             while True:
                 try:
                     present_value = float(input("Enter present value: "))
+
                     interest_rate = float(
                         input("Enter annual interest rate (%): ")
                     )
+
                     years = int(input("Enter number of years: "))
 
                     if present_value < 0 or interest_rate < 0 or years <= 0:
@@ -165,9 +177,11 @@ def financial_calculator():
             while True:
                 try:
                     future_value = float(input("Enter future value: "))
+
                     interest_rate = float(
                         input("Enter annual discount rate (%): ")
                     )
+
                     years = int(input("Enter number of years: "))
 
                     if future_value < 0 or interest_rate < 0 or years <= 0:
