@@ -1,7 +1,10 @@
 import math
+from logger import logger
 
 
 def general_calculator():
+
+    logger.info("General Calculator opened")
 
     # First number
     while True:
@@ -11,6 +14,7 @@ def general_calculator():
 
         except ValueError:
             print("Error: Please enter a valid number.")
+            logger.warning("Invalid first number entered in General Calculator")
 
     # Operation
     while True:
@@ -22,6 +26,9 @@ def general_calculator():
             break
         else:
             print("Error: Invalid operation. Please try again.")
+            logger.warning(
+                f"Invalid operation entered in General Calculator: {operation}"
+            )
 
     # Second number
     while True:
@@ -30,16 +37,21 @@ def general_calculator():
 
             if operation == "/" and num2 == 0:
                 print("Error: Cannot divide by zero.")
+                logger.warning("Division by zero attempted")
                 continue
 
             if operation == "root" and num2 == 0:
                 print("Error: Root degree cannot be zero.")
+                logger.warning("Root with degree zero attempted")
                 continue
 
             if operation == "log":
 
                 if num1 <= 0:
                     print("Error: Logarithm value must be greater than zero.")
+                    logger.warning(
+                        f"Invalid logarithm value entered: {num1}"
+                    )
                     continue
 
                 if num2 <= 0 or num2 == 1:
@@ -47,12 +59,18 @@ def general_calculator():
                         "Error: Logarithm base must be greater than zero "
                         "and cannot be 1."
                     )
+                    logger.warning(
+                        f"Invalid logarithm base entered: {num2}"
+                    )
                     continue
 
             break
 
         except ValueError:
             print("Error: Please enter a valid number.")
+            logger.warning(
+                "Invalid second number entered in General Calculator"
+            )
 
     # Calculation
     result = {
@@ -67,8 +85,14 @@ def general_calculator():
 
     print(f"\nResult: {result}")
 
+    logger.info(
+        f"General Calculator: {num1} {operation} {num2} = {result}"
+    )
+
 
 def financial_calculator():
+
+    logger.info("Financial Calculator opened")
 
     # Fixed annual interest rate for loan calculations
     annual_interest_rate = 0.12
@@ -90,6 +114,7 @@ def financial_calculator():
 
         # Back to Main Menu
         if operation == "0":
+            logger.info("Returned from Financial Calculator to Main Menu")
             return
 
         # --------------------------------
@@ -104,25 +129,35 @@ def financial_calculator():
 
                     if loan_amount <= 0:
                         print("Error: Loan amount must be greater than zero.")
+                        logger.warning(
+                            f"Invalid loan amount entered: {loan_amount}"
+                        )
                         continue
 
                     break
 
                 except ValueError:
                     print("Error: Please enter a valid number.")
+                    logger.warning("Invalid loan amount entered")
 
             while True:
                 try:
                     years = int(input("Enter loan period in years: "))
 
                     if years <= 0:
-                        print("Error: Number of years must be greater than zero.")
+                        print(
+                            "Error: Number of years must be greater than zero."
+                        )
+                        logger.warning(
+                            f"Invalid loan period entered: {years}"
+                        )
                         continue
 
                     break
 
                 except ValueError:
                     print("Error: Please enter a valid whole number.")
+                    logger.warning("Invalid loan period entered")
 
             monthly_interest_rate = annual_interest_rate / 12
             number_of_payments = years * 12
@@ -134,8 +169,19 @@ def financial_calculator():
                 / ((1 + monthly_interest_rate) ** number_of_payments - 1)
             )
 
-            print(f"\nAnnual interest rate: {annual_interest_rate * 100}%")
+            print(
+                f"\nAnnual interest rate: "
+                f"{annual_interest_rate * 100}%"
+            )
             print(f"Monthly payment: {monthly_payment:.2f}")
+
+            logger.info(
+                f"Loan Monthly Payment: "
+                f"loan={loan_amount}, "
+                f"years={years}, "
+                f"interest={annual_interest_rate * 100}%, "
+                f"monthly_payment={monthly_payment:.2f}"
+            )
 
         # --------------------------------
         # 2. Future Value
@@ -145,28 +191,52 @@ def financial_calculator():
 
             while True:
                 try:
-                    present_value = float(input("Enter present value: "))
+                    present_value = float(
+                        input("Enter present value: ")
+                    )
 
                     interest_rate = float(
                         input("Enter annual interest rate (%): ")
                     )
 
-                    years = int(input("Enter number of years: "))
+                    years = int(
+                        input("Enter number of years: ")
+                    )
 
-                    if present_value < 0 or interest_rate < 0 or years <= 0:
+                    if (
+                        present_value < 0
+                        or interest_rate < 0
+                        or years <= 0
+                    ):
                         print("Error: Please enter positive values.")
+                        logger.warning(
+                            "Invalid values entered for "
+                            "Future Value calculation"
+                        )
                         continue
 
                     break
 
                 except ValueError:
                     print("Error: Please enter valid numbers.")
+                    logger.warning(
+                        "Invalid input entered for "
+                        "Future Value calculation"
+                    )
 
             rate = interest_rate / 100
 
             future_value = present_value * (1 + rate) ** years
 
             print(f"\nFuture Value: {future_value:.2f}")
+
+            logger.info(
+                f"Future Value: "
+                f"present_value={present_value}, "
+                f"interest_rate={interest_rate}%, "
+                f"years={years}, "
+                f"future_value={future_value:.2f}"
+            )
 
         # --------------------------------
         # 3. Present Value
@@ -176,28 +246,52 @@ def financial_calculator():
 
             while True:
                 try:
-                    future_value = float(input("Enter future value: "))
+                    future_value = float(
+                        input("Enter future value: ")
+                    )
 
                     interest_rate = float(
                         input("Enter annual discount rate (%): ")
                     )
 
-                    years = int(input("Enter number of years: "))
+                    years = int(
+                        input("Enter number of years: ")
+                    )
 
-                    if future_value < 0 or interest_rate < 0 or years <= 0:
+                    if (
+                        future_value < 0
+                        or interest_rate < 0
+                        or years <= 0
+                    ):
                         print("Error: Please enter positive values.")
+                        logger.warning(
+                            "Invalid values entered for "
+                            "Present Value calculation"
+                        )
                         continue
 
                     break
 
                 except ValueError:
                     print("Error: Please enter valid numbers.")
+                    logger.warning(
+                        "Invalid input entered for "
+                        "Present Value calculation"
+                    )
 
             rate = interest_rate / 100
 
             present_value = future_value / (1 + rate) ** years
 
             print(f"\nPresent Value: {present_value:.2f}")
+
+            logger.info(
+                f"Present Value: "
+                f"future_value={future_value}, "
+                f"discount_rate={interest_rate}%, "
+                f"years={years}, "
+                f"present_value={present_value:.2f}"
+            )
 
         # --------------------------------
         # 4. Compound Interest
@@ -207,16 +301,23 @@ def financial_calculator():
 
             while True:
                 try:
-                    principal = float(input("Enter initial amount: "))
+                    principal = float(
+                        input("Enter initial amount: ")
+                    )
 
                     interest_rate = float(
                         input("Enter annual interest rate (%): ")
                     )
 
-                    years = int(input("Enter number of years: "))
+                    years = int(
+                        input("Enter number of years: ")
+                    )
 
                     compounds_per_year = int(
-                        input("Enter number of compounding periods per year: ")
+                        input(
+                            "Enter number of compounding "
+                            "periods per year: "
+                        )
                     )
 
                     if (
@@ -226,12 +327,20 @@ def financial_calculator():
                         or compounds_per_year <= 0
                     ):
                         print("Error: Please enter positive values.")
+                        logger.warning(
+                            "Invalid values entered for "
+                            "Compound Interest calculation"
+                        )
                         continue
 
                     break
 
                 except ValueError:
                     print("Error: Please enter valid numbers.")
+                    logger.warning(
+                        "Invalid input entered for "
+                        "Compound Interest calculation"
+                    )
 
             rate = interest_rate / 100
 
@@ -243,6 +352,16 @@ def financial_calculator():
 
             print(f"\nFinal Amount: {final_amount:.2f}")
             print(f"Interest Earned: {interest_earned:.2f}")
+
+            logger.info(
+                f"Compound Interest: "
+                f"principal={principal}, "
+                f"interest_rate={interest_rate}%, "
+                f"years={years}, "
+                f"compounds_per_year={compounds_per_year}, "
+                f"final_amount={final_amount:.2f}, "
+                f"interest_earned={interest_earned:.2f}"
+            )
 
         # --------------------------------
         # 5. Investment Return (CAGR)
@@ -260,16 +379,30 @@ def financial_calculator():
                         input("Enter ending investment value: ")
                     )
 
-                    years = int(input("Enter number of years: "))
+                    years = int(
+                        input("Enter number of years: ")
+                    )
 
-                    if beginning_value <= 0 or ending_value < 0 or years <= 0:
-                        print("Error: Please enter valid positive values.")
+                    if (
+                        beginning_value <= 0
+                        or ending_value < 0
+                        or years <= 0
+                    ):
+                        print(
+                            "Error: Please enter valid positive values."
+                        )
+                        logger.warning(
+                            "Invalid values entered for CAGR calculation"
+                        )
                         continue
 
                     break
 
                 except ValueError:
                     print("Error: Please enter valid numbers.")
+                    logger.warning(
+                        "Invalid input entered for CAGR calculation"
+                    )
 
             cagr = (
                 (ending_value / beginning_value) ** (1 / years)
@@ -278,11 +411,24 @@ def financial_calculator():
 
             print(f"\nCAGR: {cagr * 100:.2f}%")
 
+            logger.info(
+                f"CAGR: "
+                f"beginning_value={beginning_value}, "
+                f"ending_value={ending_value}, "
+                f"years={years}, "
+                f"cagr={cagr * 100:.2f}%"
+            )
+
         else:
             print("Error: Invalid operation. Please choose 0-5.")
+            logger.warning(
+                f"Invalid Financial Calculator menu choice: {operation}"
+            )
 
 
 def calculator():
+
+    logger.info("Calculator application started")
 
     while True:
 
@@ -302,10 +448,16 @@ def calculator():
 
         elif choice == "0":
             print("Goodbye!")
+            logger.info("Calculator application closed")
             break
 
         else:
-            print("Error: Invalid choice. Please enter 0, 1, or 2.")
+            print(
+                "Error: Invalid choice. Please enter 0, 1, or 2."
+            )
+            logger.warning(
+                f"Invalid Main Menu choice: {choice}"
+            )
 
 
 if __name__ == "__main__":
