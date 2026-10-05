@@ -2,6 +2,18 @@ import math
 from logger import logger
 
 
+# Only the chosen operation is evaluated
+OPERATIONS = {
+    "+": lambda a, b: a + b,
+    "-": lambda a, b: a - b,
+    "*": lambda a, b: a * b,
+    "/": lambda a, b: a / b,
+    "**": lambda a, b: a ** b,
+    "root": lambda a, b: a ** (1 / b),
+    "log": lambda a, b: math.log(a, b),
+}
+
+
 def general_calculator():
 
     logger.info("General Calculator opened")
@@ -22,7 +34,7 @@ def general_calculator():
             "Choose operation (+, -, *, /, **, root, log): "
         )
 
-        if operation in ["+", "-", "*", "/", "**", "root", "log"]:
+        if operation in OPERATIONS:
             break
         else:
             print("Error: Invalid operation. Please try again.")
@@ -73,15 +85,7 @@ def general_calculator():
             )
 
     # Calculation
-    result = {
-        (operation == "+"): num1 + num2,
-        (operation == "-"): num1 - num2,
-        (operation == "*"): num1 * num2,
-        (operation == "/"): num1 / num2,
-        (operation == "**"): num1 ** num2,
-        (operation == "root"): num1 ** (1 / num2),
-        (operation == "log"): math.log(num1, num2)
-    }[True]
+    result = OPERATIONS[operation](num1, num2)
 
     print(f"\nResult: {result}")
 
