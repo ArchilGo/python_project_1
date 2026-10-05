@@ -98,9 +98,6 @@ def financial_calculator():
 
     logger.info("Financial Calculator opened")
 
-    # Fixed annual interest rate for loan calculations
-    annual_interest_rate = 0.12
-
     while True:
 
         print("\nFINANCIAL CALCULATOR")
@@ -146,14 +143,34 @@ def financial_calculator():
 
             while True:
                 try:
-                    years = int(input("Enter loan period in years: "))
+                    interest_rate = float(
+                        input("Enter annual interest rate (%): ")
+                    )
 
-                    if years <= 0:
+                    if interest_rate < 0:
+                        print("Error: Interest rate cannot be negative.")
+                        logger.warning(
+                            f"Invalid loan interest rate entered: "
+                            f"{interest_rate}"
+                        )
+                        continue
+
+                    break
+
+                except ValueError:
+                    print("Error: Please enter a valid number.")
+                    logger.warning("Invalid loan interest rate entered")
+
+            while True:
+                try:
+                    months = int(input("Enter loan period in months: "))
+
+                    if months <= 0:
                         print(
-                            "Error: Number of years must be greater than zero."
+                            "Error: Number of months must be greater than zero."
                         )
                         logger.warning(
-                            f"Invalid loan period entered: {years}"
+                            f"Invalid loan period entered: {months}"
                         )
                         continue
 
@@ -163,27 +180,26 @@ def financial_calculator():
                     print("Error: Please enter a valid whole number.")
                     logger.warning("Invalid loan period entered")
 
-            monthly_interest_rate = annual_interest_rate / 12
-            number_of_payments = years * 12
+            monthly_interest_rate = interest_rate / 100 / 12
 
-            monthly_payment = (
-                loan_amount
-                * monthly_interest_rate
-                * (1 + monthly_interest_rate) ** number_of_payments
-                / ((1 + monthly_interest_rate) ** number_of_payments - 1)
-            )
+            # With 0% interest the formula divides by zero
+            if monthly_interest_rate == 0:
+                monthly_payment = loan_amount / months
+            else:
+                monthly_payment = (
+                    loan_amount
+                    * monthly_interest_rate
+                    * (1 + monthly_interest_rate) ** months
+                    / ((1 + monthly_interest_rate) ** months - 1)
+                )
 
-            print(
-                f"\nAnnual interest rate: "
-                f"{annual_interest_rate * 100}%"
-            )
-            print(f"Monthly payment: {monthly_payment:.2f}")
+            print(f"\nMonthly payment: {monthly_payment:.2f}")
 
             logger.info(
                 f"Loan Monthly Payment: "
                 f"loan={loan_amount}, "
-                f"years={years}, "
-                f"interest={annual_interest_rate * 100}%, "
+                f"months={months}, "
+                f"interest={interest_rate}%, "
                 f"monthly_payment={monthly_payment:.2f}"
             )
 
